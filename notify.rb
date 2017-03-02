@@ -6,44 +6,57 @@
 require 'json'
 require 'date'
 require_relative "notify-osd-ruby.rb"
+require_relative 'db.rb'
+require_relative 'menu.rb'
+require_relative 'menu/menu_date.rb'
+require_relative 'menu/date/course.rb'
+require "google/cloud/vision"
 weekday = Date.today.strftime("%u") # mandag er 1
 
-if ARGV.length > 0
-  if ARGV[0] == "edit"
-    system("gnome-open #{Dir.pwd}/menu.json")
-    exit
-  else
-    days = {"mandag" => 1, "tirsdag" => 2, "onsdag" => 3, "torsdag" => 4, "fredag" => 5}
-    result = days[ARGV[0]]
-    if !result.nil?
-      weekday = result.to_s
-    end
-  end
-end
 
 def post_notification menu
   notification = Notification.new
   notification.title = "Frokostmenu"
-  notification.body = menu.join("\n\n")
+  notification.body = menu.courses_for_date.map(&:text).join("\n\n")
   notification.urgency = "critical"
   notification.expire_time = 30 * 1000
   notification.post
 end
 
-def get_menu
-  file_name = 'menu.json'
-  raise StandardError, "Kan ikke finde menu.json" if !File.exists?("#{File.dirname(__FILE__)}/#{file_name}")
-  file = File.read("#{File.dirname(__FILE__)}/#{file_name}")
-  return JSON.parse(file)
+def create_menu
+  work_days = ["Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag"]
+  vision = Google::Cloud::Vision.new project: "804699923425"
+  menu_image = vision.image "img/menu.jpg"
+  anno = vision.annotate menu_image, text: true
+  menu = Menu.new
+  current_day = ""
+  menu_json = {}
+  anno.text.to_s.split("\n").each do |line|
+    if line.match /Menu uge/
+      menu.week = line.split(" ")[2] || Date.today.cweek
+    elsif work_days.include?(line)
+      current_day = line
+    elsif current_day != "" && line != "Sodexo"
+      menu_json[current_day] ||= []
+      menu_json[current_day] << line.strip.gsub("o ", "")
+    end
+  end
+
+  dates = menu_json.keys.map do |date|
+    courses = menu_json[date].map do |c_sentence|
+      Course.new(c_sentence)
+    end
+    date = MenuDate.new(date, courses)
+  end
+  menu.dates = dates
+  menu.save
 end
 
-menu = get_menu
-todays_menu = menu[weekday]
 
-if todays_menu.nil? || todays_menu.empty?
-  puts "Kunne ikke finde en menu."
+db = Db.new
+menu = Menu.by_week(Date.today.cweek, db)
+if menu.nil?
+  create_menu
 else
-  post_notification todays_menu
-  puts "\e[1mFrokostmenu\e[0m"
-  puts todays_menu.join("\n")
+  post_notification menu
 end

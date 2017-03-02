@@ -1,21 +1,77 @@
 {
-  "1": [
-  ],
-  "2": [
-  ],
-  "3": [
-    "Kylling i karry med ris, ristede kokus, bananchips og hjemmelavet chutney.",
-    "Let stuvede rødbeder med persille og spidskommen.",
-    "Nudelsuppe med ingefær, chili og lime."
-    ],
-  "4": [
-    "Langtidsstegt lammeculotte med let ristede bønner og flødekartofler.",
-    "Kyllingetærte med grøntsager og urter.",
-    "Hyldebærsuppe."
-  ],
-  "5": [
-    "Fiskefrikadeller med hjemmelavet remoulade, citron og urter.",
-    "Dahl indisk vegetarisk linsegryderet.",
-    "Dagens suppe."
-  ]
+  "9": {
+    "week": 9,
+    "dates": [
+      {
+        "date": "Mandag",
+        "courses": [
+          {
+            "text": "Kyllingelar med ristede kartofler hjemmelavet aioli og urter"
+          },
+          {
+            "text": "De orange med det sure"
+          },
+          {
+            "text": "Cremet karry suppe med ristede kokos"
+          }
+        ]
+      },
+      {
+        "date": "Tirsdag",
+        "courses": [
+          {
+            "text": "Slow oksegryde med et tvist af foran og krydret hvedekerner"
+          },
+          {
+            "text": "Tortellini med urter og hjemmelavet timianolie"
+          },
+          {
+            "text": "Kartoffel-porresuppe med flade"
+          }
+        ]
+      },
+      {
+        "date": "Onsdag",
+        "courses": [
+          {
+            "text": "Krebinet med stuvede forarsgrant sma kartofler og hjemmelavet sennep"
+          },
+          {
+            "text": "Kalvelever med bladelag og hjemmelavet surt"
+          },
+          {
+            "text": "Cremet tomatsuppe med bredcrutons"
+          }
+        ]
+      },
+      {
+        "date": "Torsdag",
+        "courses": [
+          {
+            "text": "Langtidsstegt lammeculotte med let ristede banner og fladekartofler"
+          },
+          {
+            "text": "Kyllingeterte med grantsager og urter"
+          },
+          {
+            "text": "Hyldebarsuppe med tvebakker"
+          }
+        ]
+      },
+      {
+        "date": "Fredag",
+        "courses": [
+          {
+            "text": "Fiskefrikadeller med hjemmelavet remoulade, citron og urter"
+          },
+          {
+            "text": "Dahl indisk vegetarisk linsegryderet"
+          },
+          {
+            "text": "Dagens suppe"
+          }
+        ]
+      }
+    ]
+  }
 }
